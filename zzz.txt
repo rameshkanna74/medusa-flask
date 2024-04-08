@@ -1,0 +1,55 @@
+# Use a lighter base image
+FROM python:3.12-slim AS builder
+
+# Set up a non-root user
+RUN useradd --create-home --shell /bin/bash appuser
+USER appuser
+
+# Set environment variables for Flask
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+# Set up a working directory for the application
+WORKDIR /home/appuser/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+
+ENV PYTHONUNBUFFERED 1
+
+# Install dependencies
+COPY --chown=appuser:appuser requirements.txt requirements.txt
+RUN python -m venv /home/appuser/venv && \
+    . /home/appuser/venv/bin/activate && \
+    pip install --no-cache-dir -r requirements.txt
+
+
+# Copy the application code into the container
+COPY --chown=appuser:appuser . .
+
+# Expose port 5000 for the Flask application
+EXPOSE 5000
+
+# Set environment variables
+ENV PATH=/home/appuser/venv/bin:$PATH
+ENV PYTHONPATH=/home/appuser/venv/lib/python3.12/site-packages
+
+# Start the Flask application with Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+
+# Optional: Add health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl --fail http://localhost:5000/ || exit 1
+-----------------
+def dbConnect():
+    # conn_str = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:kumezon.database.windows.net;Database=KUMEZONDB1;Uid=KZ_su;Pwd={=!Kumezon88!=};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+    cnxn = pyodbc.connect(conn_str)
+    if cnxn:
+        cursor = cnxn.cursor()
+        cursor.execute("SELECT top(1) * FROM HUB_TEST")
+        rows = cursor.fetchall()
+        for row in rows:
+            return str(row)
+    else:
+        print("Problem in Connection...")
+    # Close the cursor and connection
+    cursor.close()
+    cnxn.close()

@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}
+{% block content%}
+<h3>Update Entry</h3>
+<br>
+<form method="post" action="/update/{{Item.id}}">
+  <div class="mb-2">
+    <label for="titleid" class="form-label">Title: </label>
+    <input type="text" placeholder="{{Item.title}}" id="titleid" name="title" class="form-control">
+
+  </div>
+  <div class="mb-2">
+
+    <label for="decid" class="form-label">Description: </label>
+    <input type="text" placeholder="{{Item.description}}" id="decid" name="description" class="form-control">
+  </div>
+
+
+  
+   <br>
+  <input type="submit" value="Submit Form" class="btn btn-primary">
+</form>
+
+
+{% endblock %}
+  

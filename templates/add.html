@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content%}
+<h3>Add Entry</h3>
+<br>
+<form method="post" action="#submit">
+  <div class="mb-2">
+    <label for="titleid" class="form-label">Title: </label>
+    <input type="text" placeholder="Enter Title" id="titleid" name="title" class="form-control">
+
+  </div>
+  <div class="mb-2">
+
+    <label for="decid" class="form-label">Description: </label>
+    <input type="text" placeholder="Enter Description" id="decid" name="description" class="form-control">
+  </div>
+
+
+  
+   <br>
+  <input type="submit" value="Submit Form" class="btn btn-primary">
+</form>
+
+ 
+
+{% endblock %}
+  
